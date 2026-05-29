@@ -218,19 +218,6 @@ const getStatusBadge = (status: string) => {
   }
 }
 
-const getStatusBadge = (status: string) => {
-  switch (status) {
-    case 'Chờ xác nhận':
-      return <Badge variant="outline">Chờ xác nhận</Badge>
-    case 'Đang giao':
-      return <Badge variant="secondary">Đang giao</Badge>
-    case 'Hoàn thành':
-      return <Badge variant="default" className="bg-green-600">Hoàn thành</Badge>
-    default:
-      return <Badge>{status}</Badge>
-  }
-}
-
 export default function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [activeTab, setActiveTab] = useState('dashboard')
