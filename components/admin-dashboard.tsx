@@ -60,6 +60,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogClose,
 } from '@/components/ui/dialog'
 import {
   Popover,
@@ -241,12 +242,25 @@ function ProductCard({ item, onSelect }: ProductCardProps) {
     <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => onSelect(item)}>
       <CardContent className="pt-6">
         <div className="space-y-4">
-          {/* Custom Product Image Container */}
+          {/* Custom Product Image Container with Enhanced Decorative Elements */}
           <div className="relative w-full aspect-square bg-blue-50 rounded-2xl flex items-center justify-center overflow-hidden">
             {/* Top-right Sparkle */}
             <div className="absolute top-4 right-4">
               <Sparkles size={24} className="text-yellow-400" />
             </div>
+            
+            {/* Background circular backdrop */}
+            <div className="absolute w-32 h-32 bg-white opacity-20 rounded-full blur-sm"></div>
+            
+            {/* Decorative faded dots */}
+            <div className="absolute top-6 left-8 w-2 h-2 bg-blue-100 rounded-full opacity-40"></div>
+            <div className="absolute bottom-10 right-6 w-1.5 h-1.5 bg-blue-100 rounded-full opacity-40"></div>
+            <div className="absolute top-16 right-12 w-1.5 h-1.5 bg-blue-100 rounded-full opacity-40"></div>
+            <div className="absolute bottom-12 left-10 w-2 h-2 bg-blue-100 rounded-full opacity-35"></div>
+            
+            {/* Decorative plus signs */}
+            <div className="absolute top-8 right-20 text-blue-200 opacity-30 text-lg">+</div>
+            <div className="absolute bottom-8 left-12 text-blue-200 opacity-30 text-lg">+</div>
             
             {/* Center Icon */}
             {IconComponent ? (
@@ -458,7 +472,7 @@ export default function AdminDashboard() {
 
             <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">Trần Anh Tuấn</p>
+                <p className="text-sm font-medium text-gray-900">qdatdz</p>
                 <p className="text-xs text-gray-500">Quản trị viên</p>
               </div>
               
@@ -466,9 +480,9 @@ export default function AdminDashboard() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="cursor-pointer">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" />
-                      <AvatarFallback>AT</AvatarFallback>
+                    <Avatar className="h-10 w-10 bg-gray-200">
+                      <AvatarImage src="" />
+                      <AvatarFallback className="bg-gray-300 text-gray-600">QD</AvatarFallback>
                     </Avatar>
                   </button>
                 </DropdownMenuTrigger>
@@ -1008,20 +1022,35 @@ export default function AdminDashboard() {
       {/* Approval Details Dialog */}
       {selectedApproval && (
         <Dialog open={!!selectedApproval} onOpenChange={() => setSelectedApproval(null)}>
-          <DialogContent>
-            <DialogHeader>
+          <DialogContent className="max-h-[85vh] flex flex-col">
+            <DialogHeader className="relative">
               <DialogTitle>Chi tiết sản phẩm</DialogTitle>
               <DialogDescription>
                 Thông tin chi tiết sản phẩm cần duyệt
               </DialogDescription>
+              <DialogClose className="absolute top-2 right-2 p-1" />
             </DialogHeader>
-            <div className="space-y-4">
-              {/* Custom Product Image Container */}
+            
+            <div className="flex-1 overflow-y-auto space-y-4 pr-4">
+              {/* Custom Product Image Container with Enhanced Decorative Elements */}
               <div className="relative w-full aspect-square bg-blue-50 rounded-2xl flex items-center justify-center overflow-hidden">
                 {/* Top-right Sparkle */}
                 <div className="absolute top-6 right-6">
                   <Sparkles size={32} className="text-yellow-400" />
                 </div>
+                
+                {/* Background circular backdrop */}
+                <div className="absolute w-48 h-48 bg-white opacity-20 rounded-full blur-sm"></div>
+                
+                {/* Decorative faded dots */}
+                <div className="absolute top-8 left-12 w-3 h-3 bg-blue-100 rounded-full opacity-40"></div>
+                <div className="absolute bottom-16 right-10 w-2 h-2 bg-blue-100 rounded-full opacity-40"></div>
+                <div className="absolute top-24 right-20 w-2 h-2 bg-blue-100 rounded-full opacity-40"></div>
+                <div className="absolute bottom-20 left-16 w-2.5 h-2.5 bg-blue-100 rounded-full opacity-35"></div>
+                
+                {/* Decorative plus signs */}
+                <div className="absolute top-12 right-32 text-blue-200 opacity-30 text-2xl">+</div>
+                <div className="absolute bottom-12 left-20 text-blue-200 opacity-30 text-2xl">+</div>
                 
                 {/* Center Icon */}
                 {selectedApproval.icon ? (
@@ -1063,7 +1092,8 @@ export default function AdminDashboard() {
                 <p className="text-gray-900">{selectedApproval.tinhTrang}</p>
               </div>
             </div>
-            <DialogFooter className="gap-2">
+            
+            <DialogFooter className="gap-2 mt-4 border-t pt-4">
               <Button
                 className="bg-green-600 hover:bg-green-700 text-white"
                 onClick={() => handleApprove(selectedApproval.id)}
