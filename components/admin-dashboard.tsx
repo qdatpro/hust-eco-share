@@ -17,6 +17,10 @@ import {
   LogOut,
   User,
   LogIn,
+  BookOpen,
+  FlaskConical,
+  Cpu,
+  Sparkles,
 } from 'lucide-react'
 import {
   BarChart,
@@ -79,53 +83,53 @@ const revenueData = [
 const initialOrders = [
   {
     id: 'ĐH001',
-    khachHang: 'Nguyễn Văn A',
-    sanPham: 'Combo Giải tích 1',
-    tong: 450000,
+    khachHang: 'Lê Hoàng Minh',
+    sanPham: 'Giáo trình Giải tích 1 (MI1110)',
+    tong: 45000,
     donVi: 'VNĐ',
     trangThai: 'Chờ xác nhận',
     diaDiem: 'Thư viện Tạ Quang Bửu',
   },
   {
     id: 'ĐH002',
-    khachHang: 'Trần Thị B',
-    sanPham: 'Áo Blouse Lab',
-    tong: 250,
+    khachHang: 'Phạm Thu Trang',
+    sanPham: 'Áo Blouse Lab chất lượng',
+    tong: 15,
     donVi: 'HUST-coin',
     trangThai: 'Đang giao',
     diaDiem: 'Sảnh Tòa C1',
   },
   {
     id: 'ĐH003',
-    khachHang: 'Phạm Minh C',
-    sanPham: 'Giáo trình VLSI',
-    tong: 650000,
+    khachHang: 'Bùi Việt Hoàng',
+    sanPham: 'Tài liệu Hóa lý (CH3400)',
+    tong: 80000,
     donVi: 'VNĐ',
     trangThai: 'Hoàn thành',
     diaDiem: 'Thư viện Tạ Quang Bửu',
   },
   {
     id: 'ĐH004',
-    khachHang: 'Lê Quốc D',
-    sanPham: 'Bộ kit Thí nghiệm',
-    tong: 500,
+    khachHang: 'Đinh Hải Yến',
+    sanPham: 'Bộ kit Mạch điện tử (EE2001)',
+    tong: 30,
     donVi: 'HUST-coin',
     trangThai: 'Chờ xác nhận',
     diaDiem: 'Khu ký túc xá K',
   },
   {
     id: 'ĐH005',
-    khachHang: 'Vũ Hương E',
-    sanPham: 'Sách Đại số tuyến tính',
-    tong: 380000,
+    khachHang: 'Ngô Thị Kim Anh',
+    sanPham: 'Sách Đại số tuyến tính (MI2010)',
+    tong: 65000,
     donVi: 'VNĐ',
     trangThai: 'Hoàn thành',
     diaDiem: 'Sảnh Tòa C1',
   },
   {
     id: 'ĐH006',
-    khachHang: 'Hoàng Quân F',
-    sanPham: 'Laptop cũ HP',
+    khachHang: 'Trần Minh Quân',
+    sanPham: 'Laptop ASUS cũ (nhập khẩu)',
     tong: 3500000,
     donVi: 'VNĐ',
     trangThai: 'Chờ xác nhận',
@@ -136,27 +140,33 @@ const initialOrders = [
 const initialApprovalItems = [
   {
     id: 1,
-    tenVatPham: 'Sách giáo khoa Toán học',
-    nguoiGuiDi: 'Nguyễn Văn A',
+    tenVatPham: 'Tài liệu Xác suất thống kê (MI2020)',
+    maHocPhan: 'MI2020',
+    nguoiGuiDi: 'Nguyễn Thanh Sơn',
     thoiGianGui: '2 giờ trước',
-    hinhAnh: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=300&h=200&fit=crop',
-    tinhTrang: 'Sách còn mới 90%',
+    tinhTrang: 'Sách còn mới 90%, chưa sử dụng',
+    icon: BookOpen,
+    iconColor: 'text-red-700',
   },
   {
     id: 2,
     tenVatPham: 'Áo Blouse Lab chất lượng tốt',
-    nguoiGuiDi: 'Trần Thị B',
+    maHocPhan: 'LAB-2024',
+    nguoiGuiDi: 'Vũ Thị Hoa',
     thoiGianGui: '4 giờ trước',
-    hinhAnh: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=200&fit=crop',
     tinhTrang: 'Như mới, chưa mặc lần nào',
+    icon: null,
+    iconColor: 'text-red-700',
   },
   {
     id: 3,
-    tenVatPham: 'Board mạch điện tử',
-    nguoiGuiDi: 'Phạm Minh C',
+    tenVatPham: 'Board mạch điện tử FPGA (EE3001)',
+    maHocPhan: 'EE3001',
+    nguoiGuiDi: 'Hoàng Minh Tuấn',
     thoiGianGui: '1 ngày trước',
-    hinhAnh: 'https://images.unsplash.com/photo-1563207153-f403bf289096?w=300&h=200&fit=crop',
-    tinhTrang: 'Hoạt động bình thường',
+    tinhTrang: 'Hoạt động bình thường, test xong',
+    icon: Cpu,
+    iconColor: 'text-red-700',
   },
 ]
 
@@ -164,44 +174,44 @@ const users = [
   {
     id: 1,
     mssv: '202301001',
-    hoTen: 'Nguyễn Văn A',
+    hoTen: 'Lê Hoàng Minh',
     vienNganh: 'Kỹ thuật Hóa học',
     soDuCoin: 5000,
   },
   {
     id: 2,
     mssv: '202302045',
-    hoTen: 'Trần Thị B',
+    hoTen: 'Phạm Thu Trang',
     vienNganh: 'CNTT',
     soDuCoin: 12500,
   },
   {
     id: 3,
     mssv: '202303089',
-    hoTen: 'Phạm Minh C',
+    hoTen: 'Bùi Việt Hoàng',
     vienNganh: 'Điều khiển tự động',
     soDuCoin: 8750,
   },
   {
     id: 4,
     mssv: '202304123',
-    hoTen: 'Lê Quốc D',
+    hoTen: 'Đinh Hải Yến',
     vienNganh: 'CNTT',
     soDuCoin: 15200,
   },
   {
     id: 5,
     mssv: '202305167',
-    hoTen: 'Vũ Hương E',
+    hoTen: 'Ngô Thị Kim Anh',
     vienNganh: 'Xây dựng',
     soDuCoin: 6800,
   },
 ]
 
 const notifications = [
-  { id: 1, text: 'Đơn hàng mới: ĐH006 vừa được đặt', time: '10 phút trước' },
-  { id: 2, text: 'Sinh viên Nguyễn Văn A vừa yêu cầu ký gửi Áo Blouse Lab', time: '30 phút trước' },
-  { id: 3, text: 'Đơn hàng ĐH005 đã được giao thành công', time: '2 giờ trước' },
+  { id: 1, text: 'Đơn hàng mới: ĐH006 từ Trần Minh Quân vừa được đặt', time: '10 phút trước' },
+  { id: 2, text: 'Sinh viên Lê Hoàng Minh vừa yêu cầu ký gửi Giáo trình Giải tích 1 (MI1110)', time: '30 phút trước' },
+  { id: 3, text: 'Đơn hàng ĐH005 đã được giao thành công tới Ngô Thị Kim Anh', time: '2 giờ trước' },
   { id: 4, text: 'Hệ thống: Có 3 sản phẩm đang chờ duyệt', time: '3 giờ trước' },
 ]
 
@@ -216,6 +226,77 @@ const getStatusBadge = (status: string) => {
     default:
       return <Badge>{status}</Badge>
   }
+}
+
+// ProductCard Component for Approvals Tab
+interface ProductCardProps {
+  item: typeof initialApprovalItems[0]
+  onSelect: (item: typeof initialApprovalItems[0]) => void
+}
+
+function ProductCard({ item, onSelect }: ProductCardProps) {
+  const IconComponent = item.icon
+  
+  return (
+    <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => onSelect(item)}>
+      <CardContent className="pt-6">
+        <div className="space-y-4">
+          {/* Custom Product Image Container */}
+          <div className="relative w-full aspect-square bg-blue-50 rounded-2xl flex items-center justify-center overflow-hidden">
+            {/* Top-right Sparkle */}
+            <div className="absolute top-4 right-4">
+              <Sparkles size={24} className="text-yellow-400" />
+            </div>
+            
+            {/* Center Icon */}
+            {IconComponent ? (
+              <IconComponent size={64} className={item.iconColor} strokeWidth={1.5} />
+            ) : (
+              <div className="text-center">
+                <p className="text-2xl font-semibold text-gray-400">Áo</p>
+              </div>
+            )}
+            
+            {/* Bottom-left Sparkle */}
+            <div className="absolute bottom-4 left-4">
+              <Sparkles size={20} className="text-yellow-400" />
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-900 line-clamp-2 hover:text-red-700 transition-colors">
+              {item.tenVatPham}
+            </h3>
+            <p className="text-xs text-gray-500 mt-1 font-mono">
+              Mã: {item.maHocPhan}
+            </p>
+            <p className="text-sm text-gray-600 mt-2">
+              {item.tinhTrang}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">
+              Người gửi: {item.nguoiGuiDi}
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              {item.thoiGianGui}
+            </p>
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            <Button
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                onSelect(item)
+              }}
+            >
+              Xem chi tiết
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
 }
 
 export default function AdminDashboard() {
@@ -377,7 +458,7 @@ export default function AdminDashboard() {
 
             <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">qdatdz</p>
+                <p className="text-sm font-medium text-gray-900">Trần Anh Tuấn</p>
                 <p className="text-xs text-gray-500">Quản trị viên</p>
               </div>
               
@@ -386,8 +467,8 @@ export default function AdminDashboard() {
                 <DropdownMenuTrigger asChild>
                   <button className="cursor-pointer">
                     <Avatar className="h-10 w-10">
-                      <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=qdatdz" />
-                      <AvatarFallback>QD</AvatarFallback>
+                      <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" />
+                      <AvatarFallback>AT</AvatarFallback>
                     </Avatar>
                   </button>
                 </DropdownMenuTrigger>
@@ -639,48 +720,11 @@ export default function AdminDashboard() {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {approvalItems.map((item) => (
-                      <Card key={item.id}>
-                        <CardContent className="pt-6">
-                          <div className="space-y-4">
-                            <img
-                              src={item.hinhAnh}
-                              alt={item.tenVatPham}
-                              className="w-full h-32 bg-gray-100 rounded-lg object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                              onClick={() => setSelectedApproval(item)}
-                            />
-
-                            <div>
-                              <h3 className="font-semibold text-gray-900 line-clamp-2 cursor-pointer hover:text-[#cc0000]" onClick={() => setSelectedApproval(item)}>
-                                {item.tenVatPham}
-                              </h3>
-                              <p className="text-sm text-gray-500 mt-1">
-                                Người gửi: {item.nguoiGuiDi}
-                              </p>
-                              <p className="text-xs text-gray-400 mt-1">
-                                {item.thoiGianGui}
-                              </p>
-                            </div>
-
-                            <div className="flex gap-2 pt-2">
-                              <Button
-                                className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                                size="sm"
-                                onClick={() => handleApprove(item.id)}
-                              >
-                                Duyệt
-                              </Button>
-                              <Button
-                                className="flex-1 text-red-600 border-red-600 hover:bg-red-50"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleReject(item.id)}
-                              >
-                                Từ chối
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                      <ProductCard 
+                        key={item.id} 
+                        item={item}
+                        onSelect={setSelectedApproval}
+                      />
                     ))}
                   </div>
                 )}
@@ -972,23 +1016,48 @@ export default function AdminDashboard() {
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
-              <img
-                src={selectedApproval.hinhAnh}
-                alt={selectedApproval.tenVatPham}
-                className="w-full h-64 bg-gray-100 rounded-lg object-cover"
-              />
+              {/* Custom Product Image Container */}
+              <div className="relative w-full aspect-square bg-blue-50 rounded-2xl flex items-center justify-center overflow-hidden">
+                {/* Top-right Sparkle */}
+                <div className="absolute top-6 right-6">
+                  <Sparkles size={32} className="text-yellow-400" />
+                </div>
+                
+                {/* Center Icon */}
+                {selectedApproval.icon ? (
+                  <selectedApproval.icon size={80} className={selectedApproval.iconColor} strokeWidth={1.5} />
+                ) : (
+                  <div className="text-center">
+                    <p className="text-4xl font-semibold text-gray-300">Áo</p>
+                  </div>
+                )}
+                
+                {/* Bottom-left Sparkle */}
+                <div className="absolute bottom-6 left-6">
+                  <Sparkles size={28} className="text-yellow-400" />
+                </div>
+              </div>
+
               <div>
                 <p className="text-sm font-medium text-gray-500">Tên sản phẩm</p>
                 <p className="text-gray-900 font-semibold">{selectedApproval.tenVatPham}</p>
               </div>
+
+              <div>
+                <p className="text-sm font-medium text-gray-500">Mã học phần</p>
+                <p className="text-gray-900 font-mono font-medium">{selectedApproval.maHocPhan}</p>
+              </div>
+
               <div>
                 <p className="text-sm font-medium text-gray-500">Người gửi</p>
                 <p className="text-gray-900">{selectedApproval.nguoiGuiDi}</p>
               </div>
+
               <div>
                 <p className="text-sm font-medium text-gray-500">Thời gian gửi</p>
                 <p className="text-gray-900">{selectedApproval.thoiGianGui}</p>
               </div>
+
               <div>
                 <p className="text-sm font-medium text-gray-500">Tình trạng</p>
                 <p className="text-gray-900">{selectedApproval.tinhTrang}</p>
