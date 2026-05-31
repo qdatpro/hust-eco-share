@@ -581,7 +581,7 @@ export default function AdminDashboard() {
                         <XAxis dataKey="ngay" />
                         <YAxis />
                         <Tooltip
-                          formatter={(value) =>
+                          formatter={(value: any) =>
                             `${(value / 1000000).toFixed(1)}M VNĐ`
                           }
                         />
