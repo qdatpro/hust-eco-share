@@ -1,25 +1,42 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Sparkles, Package, X, CheckCircle2, ImagePlus, MapPin, ZoomIn, ZoomOut, Compass } from "lucide-react"
+import { Sparkles, Package, X, CheckCircle2, ImagePlus, MapPin } from "lucide-react"
+
+// --- DỮ LIỆU CÁC TRẠM KÝ GỬI CHIA THEO TRƯỜNG ---
+const locationData = {
+  HUST: [
+    { id: "hust-1", name: "Trạm Cổng Parabol", desc: "📍 Số 1 Đại Cồ Việt. Hoạt động 8h-18h." },
+    { id: "hust-2", name: "Tủ Locker TQB", desc: "📍 Tầng 1 Thư viện Tạ Quang Bửu (24/7)." },
+    { id: "hust-3", name: "Trạm Trần Đại Nghĩa", desc: "📍 Gần ngã tư Đại La. Chuyên sách giáo trình." }
+  ],
+  NEU: [
+    { id: "neu-1", name: "Trạm KTX NEU", desc: "📍 Cổng chính KTX Kinh tế Quốc dân." },
+    { id: "neu-2", name: "Tủ Locker A2", desc: "📍 Tầng 1 tòa A2. Gửi đồ nhỏ gọn." }
+  ],
+  HUCE: [
+    { id: "huce-1", name: "Trạm Cổng Xây Dựng", desc: "📍 Số 55 Đường Giải Phóng. Rộng rãi." },
+    { id: "huce-2", name: "Trạm KTX HUCE", desc: "📍 Khu KTX. Nhận dụng cụ vẽ, mô hình." }
+  ]
+};
+
+type UniKey = keyof typeof locationData;
 
 export function Hero() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   
-  const [showMap, setShowMap] = useState(false)
-  const [selectedLocation, setSelectedLocation] = useState("")
+  const [userUniversity, setUserUniversity] = useState<UniKey>("HUST")
+  const [consignmentLocation, setConsignmentLocation] = useState(locationData["HUST"][0].id)
 
-  const locations = [
-    { id: 'parabol', name: 'Cổng Parabol (Cổng 1)', x: '5%', y: '50%' },
-    { id: 'tqb', name: 'Thư viện Tạ Quang Bửu', x: '55%', y: '50%' },
-    { id: 'ktx', name: 'Cổng KTX (Trần Đại Nghĩa)', x: '88%', y: '85%' },
-    { id: 'd4', name: 'Sảnh tòa nhà D4', x: '25%', y: '65%' },
-    { id: 'ho-tien', name: 'Ghế đá Hồ Tiền', x: '45%', y: '30%' }
-  ]
+  useEffect(() => {
+    setConsignmentLocation(locationData[userUniversity][0].id);
+  }, [userUniversity]);
+
+  const selectedLocInfo = locationData[userUniversity].find(loc => loc.id === consignmentLocation) || locationData[userUniversity][0];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,12 +47,11 @@ export function Hero() {
       setTimeout(() => {
         setIsModalOpen(false)
         setIsSuccess(false)
-        setSelectedLocation("")
+        setUserUniversity("HUST")
       }, 3000)
     }, 1500)
   }
 
-  // HÀM XỬ LÝ TRƯỢT XUỐNG PHẦN COMBO
   const scrollToCombo = () => {
     const comboSection = document.getElementById('combo-section');
     if (comboSection) {
@@ -61,7 +77,7 @@ export function Hero() {
         </h1>
 
         <p className="mx-auto mb-8 max-w-2xl text-pretty text-lg text-muted-foreground md:text-xl">
-          Nền tảng trao đổi giáo trình, linh kiện và bí kíp sinh tồn nội bộ Bách Khoa.
+          Nền tảng trao đổi giáo trình, linh kiện và bí kíp sinh tồn nội bộ sinh viên.
         </p>
 
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -69,7 +85,6 @@ export function Hero() {
             <Package className="h-5 w-5" /> Ký gửi đồ ngay
           </Button>
           
-          {/* NÚT "SĂN COMBO" ĐƯỢC GẮN LỆNH TRƯỢT Ở ĐÂY */}
           <Button 
             size="lg" 
             variant="outline" 
@@ -83,110 +98,82 @@ export function Hero() {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="relative w-full max-w-md rounded-2xl bg-card p-6 shadow-2xl border border-border text-left overflow-hidden">
+          {/* Đã thêm max-h-[95vh] và overflow-y-auto để chống tràn màn hình */}
+          <div className="relative w-full max-w-md rounded-2xl bg-card p-5 shadow-2xl border border-border text-left max-h-[95vh] overflow-y-auto custom-scrollbar">
             <button onClick={() => setIsModalOpen(false)} className="absolute right-4 top-4 z-10 p-1 hover:bg-secondary rounded-full transition-colors">
               <X className="h-5 w-5 text-muted-foreground" />
             </button>
 
             {!isSuccess ? (
-              <>
-                {!showMap ? (
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <h3 className="text-xl font-bold border-b pb-2">📦 Đăng ký Ký gửi</h3>
-                    
-                    <div className="space-y-1.5">
-                      <label className="text-sm font-medium">Tên món đồ</label>
-                      <Input required placeholder="VD: Sách Giải tích 1, Arduino..." />
-                    </div>
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <h3 className="text-lg font-bold border-b pb-2">📦 Đăng ký Ký gửi</h3>
+                
+                {/* 1. Tên món đồ */}
+                <div className="space-y-1">
+                  <label className="text-sm font-medium">Tên món đồ</label>
+                  <Input required placeholder="VD: Sách Giải tích 1..." className="h-9" />
+                </div>
 
-                    <div className="space-y-1.5">
-                      <label className="text-sm font-medium">Điểm hẹn giao dịch</label>
-                      <div className="flex gap-2">
-                        <Input 
-                          readOnly 
-                          value={selectedLocation || "Chưa chọn điểm"} 
-                          className="bg-secondary/30 cursor-default font-medium text-primary text-xs"
-                        />
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          onClick={() => setShowMap(true)}
-                          className="gap-2 shrink-0 border-primary text-primary hover:bg-primary/5"
-                        >
-                          <MapPin className="h-4 w-4" /> Bản đồ
-                        </Button>
-                      </div>
-                    </div>
+                {/* 2. CHỌN ĐIỂM HẸN (ÉP GỌN LẠI 2 CỘT) */}
+                <div className="space-y-2 rounded-lg border border-primary/20 bg-primary/5 p-3">
+                  <label className="text-sm font-semibold flex items-center gap-1.5">
+                    📍 Chọn điểm Ký gửi
+                  </label>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <select 
+                      value={userUniversity}
+                      onChange={(e) => setUserUniversity(e.target.value as UniKey)}
+                      className="w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs ring-offset-background focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer"
+                    >
+                      <option value="HUST">Khu vực HUST</option>
+                      <option value="NEU">Khu vực NEU</option>
+                      <option value="HUCE">Khu vực HUCE</option>
+                    </select>
 
-                    <div className="space-y-1.5">
-                      <label className="text-sm font-medium">Ảnh món đồ (Minh chứng)</label>
-                      <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/20 bg-secondary/10 py-4 hover:border-primary/50 transition-colors cursor-pointer group">
-                        <ImagePlus className="mb-1 h-6 w-6 text-muted-foreground group-hover:text-primary" />
-                        <span className="text-xs text-muted-foreground">Click để tải ảnh lên</span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-sm font-medium">Giá mong muốn (VNĐ)</label>
-                      <Input required type="number" placeholder="VD: 50000" />
-                    </div>
-
-                    <Button type="submit" className="w-full mt-2" disabled={isSubmitting || !selectedLocation}>
-                      {isSubmitting ? "Đang đẩy dữ liệu..." : "Xác nhận ký gửi"}
-                    </Button>
-                  </form>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <Button variant="ghost" size="sm" onClick={() => setShowMap(false)} className="-ml-2">
-                        ← Trở lại Form
-                      </Button>
-                      <h3 className="font-bold text-sm">📍 Bản đồ HUST</h3>
-                    </div>
-                    
-                    <div className="relative aspect-square w-full rounded-xl bg-[#f1f5f9] border border-border overflow-hidden">
-                      <svg viewBox="0 0 400 400" className="absolute inset-0 w-full h-full">
-                        <rect x="0" y="0" width="30" height="400" fill="#cbd5e1" />
-                        <rect x="0" y="0" width="400" height="30" fill="#cbd5e1" />
-                        <rect x="370" y="0" width="30" height="400" fill="#cbd5e1" />
-                        <rect x="0" y="370" width="400" height="30" fill="#cbd5e1" />
-                        <circle cx="180" cy="120" r="30" fill="#bae6fd" stroke="#7dd3fc" strokeWidth="2" />
-                        <path d="M 200 170 h 40 v 60 h -40 z M 180 190 h 80 v 20 h -80 z" fill="#94a3b8" />
-                        <path d="M 30 160 Q 70 200 30 240" fill="none" stroke="#ef4444" strokeWidth="8" />
-                        <rect x="80" y="150" width="40" height="150" fill="#cbd5e1" rx="4" />
-                        <rect x="300" y="300" width="70" height="70" fill="#fde047" opacity="0.6" />
-                      </svg>
-                      
-                      {locations.map((loc) => (
-                        <button
-                          key={loc.id}
-                          type="button"
-                          onClick={() => {
-                            setSelectedLocation(loc.name);
-                            setShowMap(false);
-                          }}
-                          style={{ left: loc.x, top: loc.y }}
-                          className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group z-20"
-                        >
-                          <div className={`flex items-center justify-center h-7 w-7 rounded-full shadow-md ${selectedLocation === loc.name ? 'bg-primary text-white scale-125' : 'bg-white text-primary border border-primary hover:bg-primary/5'}`}>
-                            <MapPin className="h-4 w-4" />
-                          </div>
-                          <span className="absolute top-8 whitespace-nowrap rounded bg-black/80 px-2 py-1 text-[9px] font-bold text-white opacity-0 group-hover:opacity-100 shadow-lg pointer-events-none">
-                            {loc.name}
-                          </span>
-                        </button>
+                    <select 
+                      value={consignmentLocation}
+                      onChange={(e) => setConsignmentLocation(e.target.value)}
+                      className="w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs ring-offset-background focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer font-medium truncate"
+                    >
+                      {locationData[userUniversity].map(loc => (
+                        <option key={loc.id} value={loc.id}>{loc.name}</option>
                       ))}
-                    </div>
+                    </select>
                   </div>
-                )}
-              </>
+
+                  <div className="flex items-start gap-1.5 text-[11px] text-muted-foreground leading-tight pt-1">
+                    <MapPin className="mt-0.5 h-3 w-3 shrink-0 text-primary" />
+                    <span>{selectedLocInfo.desc}</span>
+                  </div>
+                </div>
+
+                {/* 3. Ảnh món đồ (Bóp mỏng lại) */}
+                <div className="space-y-1">
+                  <label className="text-sm font-medium">Ảnh minh chứng</label>
+                  <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/20 bg-secondary/10 py-3 hover:border-primary/50 transition-colors cursor-pointer group">
+                    <ImagePlus className="mb-1 h-5 w-5 text-muted-foreground group-hover:text-primary" />
+                    <span className="text-[11px] text-muted-foreground">Click để tải ảnh</span>
+                  </div>
+                </div>
+
+                {/* 4. Giá mong muốn */}
+                <div className="space-y-1">
+                  <label className="text-sm font-medium">Giá mong muốn (VNĐ)</label>
+                  <Input required type="number" placeholder="VD: 50000" className="h-9" />
+                </div>
+
+                <Button type="submit" className="w-full h-10 mt-2" disabled={isSubmitting}>
+                  {isSubmitting ? "Đang đẩy dữ liệu..." : "Xác nhận ký gửi"}
+                </Button>
+              </form>
             ) : (
-              <div className="flex flex-col items-center py-10 text-center">
-                <CheckCircle2 className="h-16 w-16 text-emerald-500 mb-4" />
-                <h3 className="text-2xl font-bold">Thành công!</h3>
-                <p className="text-sm text-muted-foreground mt-2 px-4 italic">
-                  Đã chốt kèo tại <span className="font-bold text-primary not-italic">{selectedLocation}</span>. <br/>
-                  Cậu nhớ check tin nhắn từ Admin nhé!
+              <div className="flex flex-col items-center py-8 text-center">
+                <CheckCircle2 className="h-14 w-14 text-emerald-500 mb-3" />
+                <h3 className="text-xl font-bold">Thành công!</h3>
+                <p className="text-sm text-muted-foreground mt-2 px-2 italic">
+                  Đã chốt kèo tại <span className="font-bold text-primary not-italic">{selectedLocInfo.name}</span>. <br/>
+                  Admin sẽ liên hệ cậu sớm nhé!
                 </p>
               </div>
             )}
