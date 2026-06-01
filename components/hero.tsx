@@ -3,7 +3,10 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Sparkles, Package, X, CheckCircle2, ImagePlus, MapPin, ZoomIn, ZoomOut, Compass } from "lucide-react"
+import { Sparkles, Package, X, CheckCircle2, ImagePlus, MapPin } from "lucide-react"
+import { UniversitySelector } from "@/components/university-selector"
+import { DeliveryMap } from "@/components/delivery-map"
+import { University } from "@/lib/university-locations"
 
 export function Hero() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -12,14 +15,7 @@ export function Hero() {
   
   const [showMap, setShowMap] = useState(false)
   const [selectedLocation, setSelectedLocation] = useState("")
-
-  const locations = [
-    { id: 'parabol', name: 'Cổng Parabol (Cổng 1)', x: '5%', y: '50%' },
-    { id: 'tqb', name: 'Thư viện Tạ Quang Bửu', x: '55%', y: '50%' },
-    { id: 'ktx', name: 'Cổng KTX (Trần Đại Nghĩa)', x: '88%', y: '85%' },
-    { id: 'd4', name: 'Sảnh tòa nhà D4', x: '25%', y: '65%' },
-    { id: 'ho-tien', name: 'Ghế đá Hồ Tiền', x: '45%', y: '30%' }
-  ]
+  const [selectedUniversity, setSelectedUniversity] = useState<University>("HUST")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,6 +27,7 @@ export function Hero() {
         setIsModalOpen(false)
         setIsSuccess(false)
         setSelectedLocation("")
+        setSelectedUniversity("HUST")
       }, 3000)
     }, 1500)
   }
@@ -94,6 +91,15 @@ export function Hero() {
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <h3 className="text-xl font-bold border-b pb-2">📦 Đăng ký Ký gửi</h3>
                     
+                    {/* University Selector */}
+                    <UniversitySelector
+                      selected={selectedUniversity}
+                      onChange={(uni) => {
+                        setSelectedUniversity(uni)
+                        setSelectedLocation("")
+                      }}
+                    />
+                    
                     <div className="space-y-1.5">
                       <label className="text-sm font-medium">Tên món đồ</label>
                       <Input required placeholder="VD: Sách Giải tích 1, Arduino..." />
@@ -136,48 +142,15 @@ export function Hero() {
                     </Button>
                   </form>
                 ) : (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <Button variant="ghost" size="sm" onClick={() => setShowMap(false)} className="-ml-2">
-                        ← Trở lại Form
-                      </Button>
-                      <h3 className="font-bold text-sm">📍 Bản đồ HUST</h3>
-                    </div>
-                    
-                    <div className="relative aspect-square w-full rounded-xl bg-[#f1f5f9] border border-border overflow-hidden">
-                      <svg viewBox="0 0 400 400" className="absolute inset-0 w-full h-full">
-                        <rect x="0" y="0" width="30" height="400" fill="#cbd5e1" />
-                        <rect x="0" y="0" width="400" height="30" fill="#cbd5e1" />
-                        <rect x="370" y="0" width="30" height="400" fill="#cbd5e1" />
-                        <rect x="0" y="370" width="400" height="30" fill="#cbd5e1" />
-                        <circle cx="180" cy="120" r="30" fill="#bae6fd" stroke="#7dd3fc" strokeWidth="2" />
-                        <path d="M 200 170 h 40 v 60 h -40 z M 180 190 h 80 v 20 h -80 z" fill="#94a3b8" />
-                        <path d="M 30 160 Q 70 200 30 240" fill="none" stroke="#ef4444" strokeWidth="8" />
-                        <rect x="80" y="150" width="40" height="150" fill="#cbd5e1" rx="4" />
-                        <rect x="300" y="300" width="70" height="70" fill="#fde047" opacity="0.6" />
-                      </svg>
-                      
-                      {locations.map((loc) => (
-                        <button
-                          key={loc.id}
-                          type="button"
-                          onClick={() => {
-                            setSelectedLocation(loc.name);
-                            setShowMap(false);
-                          }}
-                          style={{ left: loc.x, top: loc.y }}
-                          className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group z-20"
-                        >
-                          <div className={`flex items-center justify-center h-7 w-7 rounded-full shadow-md ${selectedLocation === loc.name ? 'bg-primary text-white scale-125' : 'bg-white text-primary border border-primary hover:bg-primary/5'}`}>
-                            <MapPin className="h-4 w-4" />
-                          </div>
-                          <span className="absolute top-8 whitespace-nowrap rounded bg-black/80 px-2 py-1 text-[9px] font-bold text-white opacity-0 group-hover:opacity-100 shadow-lg pointer-events-none">
-                            {loc.name}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  <DeliveryMap
+                    university={selectedUniversity}
+                    selectedLocation={selectedLocation}
+                    onLocationSelect={(locationName) => {
+                      setSelectedLocation(locationName)
+                      setShowMap(false)
+                    }}
+                    onBackToForm={() => setShowMap(false)}
+                  />
                 )}
               </>
             ) : (
